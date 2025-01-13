@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC } from "react";
+import { FC } from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
@@ -12,10 +12,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SelectSingleEventHandler } from "react-day-picker";
 
 interface DatePickerProps {
   dateValue: Date;
-  onSelect: (date: Date) => void;
+  onSelect: SelectSingleEventHandler;
   fromDate?: Date;
 }
 

@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchGuardianNews } from "@/services/api/sources/guardianApi";
 import { fetchNewsApiNews } from "../../services/api/sources/newsAPI";
 import { fetchNyTimesApiNews } from "../../services/api/sources/nyTimesApi";
-import { APIParams } from "@/types/news.types";
+import { APIParams, NewsArticle } from "@/types/news.types";
 
 export const fetchNews = createAsyncThunk(
   "news/fetchNews",
@@ -28,7 +28,7 @@ export const fetchNews = createAsyncThunk(
       }
 
       try {
-        let articles;
+        let articles: NewsArticle[];
         switch (filters.source) {
           case "guardian":
             articles = await fetchGuardianNews(filters);

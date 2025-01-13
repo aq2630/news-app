@@ -1,22 +1,14 @@
-import { FC } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { NewsArticle } from "../../../types/news.types";
 import NewsCard from "../NewsCard/NewsCard";
 import { Skeleton } from "../../ui/skeleton";
+import { RootState } from "@/store/store";
+import { useAppSelector } from "@/store/hooks";
 
-interface NewsFeedProps {
-  articles: NewsArticle[];
-  loading: boolean;
-  hasMore: boolean;
-  fetchMoreData: () => void;
-}
+export const NewsFeed = () => {
+  const { articles, loading } = useAppSelector(
+    (state: RootState) => state.news
+  );
 
-export const NewsFeed: FC<NewsFeedProps> = ({
-  articles,
-  loading,
-  hasMore,
-  fetchMoreData,
-}) => {
   return (
     <div>
       {loading && articles.length === 0 ? (
@@ -28,31 +20,27 @@ export const NewsFeed: FC<NewsFeedProps> = ({
             />
           ))}
         </div>
+      ) : !loading && articles.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {articles?.map((article: NewsArticle, index) => (
+            // intentionally making index as the key below as the id is not availabel in all the API sources.
+            <div key={index}>
+              <NewsCard
+                title={article?.title}
+                description={article?.description}
+                image={article.imageUrl}
+                source={article.source}
+              />
+            </div>
+          ))}
+        </div>
       ) : (
-        <InfiniteScroll
-          dataLength={10000}
-          next={fetchMoreData}
-          hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {articles?.map((article: NewsArticle) => (
-              <div key={article?.id}>
-                <NewsCard
-                  title={article?.title}
-                  description={article?.description}
-                  image={article.imageUrl}
-                  source={article.source}
-                />
-              </div>
-            ))}
-          </div>
-        </InfiniteScroll>
+        <div className="flex flex-col justify-center align-middle min-h-[calc(100vh-120px)]">
+          <h3 className="text-center font-bold text-3xl">No Articles Found</h3>
+          <h5 className="text-center font-normal text-xl">
+            Maybe try with different filters
+          </h5>
+        </div>
       )}
     </div>
   );

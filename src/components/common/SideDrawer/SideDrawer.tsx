@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { useCallback } from "react";
 import {
   Sheet,
   SheetContent,
@@ -6,33 +6,50 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import RangePIcker from "@/components/common/DatePicker/DatePicker";
 import MultiSelect from "@/components/common/MultiSelect/MultiSelect";
 import SelectInput from "@/components/common/SelectInput/SelectInput";
 import { Menu } from "lucide-react";
-import { NewsFilters } from "@/types/news.types";
-import {
-  AUTHORS,
-  CATEGORIES,
-  SOURCE_OPTIONS,
-} from "@/constants/commonConstants";
+import { AUTHORS, CATEGORIES } from "@/constants/commonConstants";
 import DatePicker from "@/components/common/DatePicker/DatePicker";
+import { Button } from "@/components/ui/button";
+import { resetFilters, updateFilters } from "@/store/slices/newsSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { format } from "date-fns";
+import { RootState } from "@/store/store";
 
-interface SideDrawerProps {
-  onValueChange: (selectedOptions: string) => void;
-  handleMultiSelect: (selectedOptions: string[], fieldName: string) => void;
-  handleDateChange: (date: Date, fieldName: string) => void;
-  articles: any[];
-  filters: NewsFilters;
-}
+const SideDrawer = () => {
+  const dispatch = useAppDispatch();
 
-const SideDrawer: FC<SideDrawerProps> = ({
-  onValueChange,
-  handleMultiSelect,
-  handleDateChange,
-  articles,
-  filters,
-}) => {
+  const { filters } = useAppSelector((state: RootState) => state.news);
+
+  const handleSourceChange = (selectedOptions: string) => {
+    dispatch(updateFilters({ source: selectedOptions }));
+  };
+
+  const handleDateChange = (dateValue: Date | undefined, fieldName: string) => {
+    const isoDate =
+      dateValue && format(new Date(dateValue), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+    dispatch(updateFilters({ [fieldName]: isoDate }));
+  };
+
+  const handleAuthorSelect = useCallback(
+    (selectedOptions: string[]) => {
+      dispatch(updateFilters({ authors: selectedOptions }));
+    },
+    [dispatch]
+  );
+
+  const handleCategorySelect = useCallback(
+    (selectedOptions: string[]) => {
+      dispatch(updateFilters({ categories: selectedOptions }));
+    },
+    [dispatch]
+  );
+
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+  };
+
   return (
     <Sheet>
       <SheetTrigger>
@@ -41,28 +58,23 @@ const SideDrawer: FC<SideDrawerProps> = ({
       <SheetContent side={"left"}>
         <SheetHeader>
           <SheetTitle>Filter and Personalize your Feed</SheetTitle>
-
           <h4 className="font-semibold">Source</h4>
           <SelectInput
             placeholder="Select Source"
-            onValueChange={onValueChange}
+            onValueChange={handleSourceChange}
             value={filters.source}
           />
           <h4 className="font-semibold">Categories</h4>
           <MultiSelect
             options={CATEGORIES}
             selected={filters?.categories || []}
-            onChange={(selectedOptions) =>
-              handleMultiSelect(selectedOptions, "categories")
-            }
+            onChange={handleCategorySelect}
           />
           <h4 className="font-semibold">Author</h4>
           <MultiSelect
             options={AUTHORS}
             selected={filters?.authors || []}
-            onChange={(selectedOptions) =>
-              handleMultiSelect(selectedOptions, "authors")
-            }
+            onChange={handleAuthorSelect}
             placeholder="Select Author"
           />
           <h4 className="font-semibold">Date Ranges</h4>
@@ -81,8 +93,12 @@ const SideDrawer: FC<SideDrawerProps> = ({
             }}
             fromDate={filters.dateFrom}
           />
+          <div className="pt-4">
+            <Button variant="outline" onClick={handleResetFilters}>
+              Reset Filters
+            </Button>
+          </div>
         </SheetHeader>
-        {/* <RangePIcker filters={filters} /> */}
       </SheetContent>
     </Sheet>
   );

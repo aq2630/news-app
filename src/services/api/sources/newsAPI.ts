@@ -1,19 +1,18 @@
-import { transformArticlesResponse } from "../../../helpers/commonhelpers";
+import {
+  getAPIParams,
+  transformArticlesResponse,
+} from "../../../helpers/commonhelpers";
 import { createNewsAPI } from "../newsApiInstance";
 import { APIParams, NewsArticle } from "@/types/news.types";
 
 const newsApi = createNewsAPI("https://newsapi.org/v2/everything");
 
 export const fetchNewsApiNews = async (
-  params?: APIParams
+  params: APIParams
 ): Promise<NewsArticle[]> => {
   try {
     const response = await newsApi.get("/", {
-      params: {
-        from: params?.dateFrom,
-        sources: "abc-news",
-        // ...params,
-      },
+      params: getAPIParams(params, "newsapi"),
       headers: {
         "X-Api-Key": import.meta.env.VITE_NEWSAPI_API_KEY || "",
       },

@@ -5,12 +5,8 @@ import { addDays } from "date-fns";
 
 const initialState: NewsState = {
   articles: [],
-  categories: [],
-  authors: [],
   loading: false,
   errors: {},
-  page: 1,
-  hasMore: true,
   filters: {
     authors: [],
     source: "all",
@@ -29,7 +25,10 @@ const newsSlice = createSlice({
       action: PayloadAction<Partial<NewsFilters>>
     ) {
       state.filters = { ...state.filters, ...action.payload };
-      state.page = 1;
+      state.articles = [];
+    },
+    resetFilters(state: NewsState) {
+      state.filters = initialState.filters;
       state.articles = [];
     },
   },
@@ -42,11 +41,7 @@ const newsSlice = createSlice({
         fetchNews.fulfilled,
         (state: NewsState, action: PayloadAction<NewsArticle[]>) => {
           state.loading = false;
-          state.articles =
-            state.page === 1
-              ? action.payload
-              : [...state.articles, ...action.payload];
-          state.page = state.page + 1;
+          state.articles = action.payload;
           state.errors = {};
         }
       )
@@ -60,5 +55,5 @@ const newsSlice = createSlice({
   },
 });
 
-export const { updateFilters } = newsSlice.actions;
+export const { updateFilters, resetFilters } = newsSlice.actions;
 export default newsSlice.reducer;

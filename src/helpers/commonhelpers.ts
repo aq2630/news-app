@@ -1,5 +1,5 @@
 import { NY_TIME_IMAGE_PREFIX } from "@/constants/commonConstants";
-import { NewsArticle, sources } from "@/types/news.types";
+import { APIParams, NewsArticle, sources } from "@/types/news.types";
 
 export const transformArticlesResponse: (
   articles: any[],
@@ -48,4 +48,42 @@ export const transformArticlesResponse: (
       source: sourceName,
     };
   });
+};
+
+export const getAPIParams = (params: APIParams, apiSource: string) => {
+  if (apiSource === "guardian") {
+    return getGuardianAPIParams(params);
+  }
+
+  if (apiSource === "nyt") {
+    return getNYTAPIParams();
+  }
+
+  if (apiSource === "newsapi") {
+    return getNewsAPIParams(params);
+  }
+};
+
+const getGuardianAPIParams = (params: APIParams) => {
+  return {
+    "api-key": import.meta.env.VITE_GUARDIAN_API_KEY,
+    q: params?.searchQuery,
+    tag: params?.categories?.join("|") || "news",
+    "from-date": params.dateFrom,
+    "to-date": params.dateTo,
+    "show-tags": "contributor",
+  };
+};
+
+const getNYTAPIParams = () => {
+  return {
+    "api-key": import.meta.env.VITE_NYTIMES_API_KEY,
+  };
+};
+
+const getNewsAPIParams = (params: APIParams) => {
+  return {
+    from: params?.dateFrom,
+    sources: "abc-news",
+  };
 };

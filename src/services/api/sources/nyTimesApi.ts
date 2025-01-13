@@ -1,4 +1,7 @@
-import { transformArticlesResponse } from "../../../helpers/commonhelpers";
+import {
+  getAPIParams,
+  transformArticlesResponse,
+} from "../../../helpers/commonhelpers";
 import { createNewsAPI } from "../newsApiInstance";
 import { APIParams, NewsArticle } from "@/types/news.types";
 
@@ -9,11 +12,7 @@ export const fetchNyTimesApiNews = async (
 ): Promise<NewsArticle[]> => {
   try {
     const response = await newsApi.get("/articlesearch.json", {
-      params: {
-        "api-key": import.meta.env.VITE_NYTIMES_API_KEY,
-        page: params.page,
-        // ...params,
-      },
+      params: getAPIParams(params, "nyt"),
     });
     return transformArticlesResponse(response.data.response.docs, "nyt");
   } catch (error) {

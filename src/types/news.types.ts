@@ -2,12 +2,8 @@ export type sources = "guardian" | "nyt" | "newsapi";
 
 export interface NewsState {
   articles: NewsArticle[];
-  categories: Category[];
-  authors: Author[];
   loading: boolean;
   errors: Record<string, string | null>;
-  page: number;
-  hasMore: boolean;
   filters: NewsFilters;
 }
 
@@ -25,18 +21,14 @@ export interface NewsArticle {
 
 export interface NewsFilters {
   searchQuery?: string;
-  categories?: string[];
-  // dateFrom and dateTo will be date format type
+  categories?: string[] | undefined;
   dateFrom: Date;
   dateTo: Date;
-  authors?: string[];
+  authors?: string[] | undefined;
   source: string;
 }
 
-export interface APIParams extends NewsFilters {
-  page: number;
-}
-
+export interface APIParams extends NewsFilters {}
 export interface Category {
   id: string;
   name: string;
@@ -46,14 +38,4 @@ export interface Author {
   id: string;
   name: string;
   source: string;
-}
-
-export interface APIParams {
-  page: number;
-  searchQuery?: string;
-  categories?: string[];
-  dateFrom: string;
-  dateTo: string;
-  authors?: string[];
-  sources: string[];
 }
