@@ -76,7 +76,7 @@ const getGuardianAPIParams = (params: APIParams) => {
   return {
     "api-key": import.meta.env.VITE_GUARDIAN_API_KEY,
     q: params?.searchQuery,
-    tag: params?.categories?.join("|") || "news",
+    tag: params?.categories?.join("|") || undefined,
     "from-date": params.dateFrom,
     "to-date": params.dateTo,
     "show-tags": "contributor",
