@@ -11,16 +11,17 @@ export const NewsFeed = () => {
 
   return (
     <div>
-      {loading && articles.length === 0 ? (
+      {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {new Array(9).fill(undefined)?.map((_, index) => (
             <Skeleton
+              // intentionally using index as the key below.
               key={`key-${index}`}
               className="w-full h-64 bg-slate-300 rounded-md"
             />
           ))}
         </div>
-      ) : !loading && articles.length > 0 ? (
+      ) : articles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {articles?.map((article: NewsArticle, index) => (
             // intentionally making index as the key below as the id is not availabel in all the API sources.

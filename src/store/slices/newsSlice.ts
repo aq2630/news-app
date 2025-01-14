@@ -11,7 +11,7 @@ const initialState: NewsState = {
     authors: [],
     source: "all",
     categories: [],
-    dateFrom: new Date(2025, 0, 1),
+    dateFrom: new Date(2024, 11, 15),
     dateTo: addDays(new Date(2025, 0, 1), 13),
   },
 };
@@ -40,8 +40,8 @@ const newsSlice = createSlice({
       .addCase(
         fetchNews.fulfilled,
         (state: NewsState, action: PayloadAction<NewsArticle[]>) => {
-          state.loading = false;
           state.articles = action.payload;
+          state.loading = false;
           state.errors = {};
         }
       )

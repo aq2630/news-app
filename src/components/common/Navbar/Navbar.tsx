@@ -26,15 +26,11 @@ const Navbar = () => {
 
   return (
     <nav className="mb-4">
-      <div className="flex gap-3">
-        <SideDrawer
-        // handleMultiSelect={handleMultiSelect}
-        // onValueChange={handleSourceChange}
-        // articles={articles}
-        // filters={filters}
-        // handleDateChange={handleDateChange}
-        />
-        <h2 className="text-2xl font-bold">News App </h2>
+      <div className="flex gap-3 sm:items-center flex-col sm:flex-row">
+        <div className="flex gap-3 justify-start items-center">
+          <SideDrawer />
+          <h2 className="text-2xl font-bold">News App </h2>
+        </div>
         <div className="flex-1">
           <Input
             placeholder="Search for Articles"

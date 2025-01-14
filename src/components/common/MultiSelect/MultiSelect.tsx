@@ -31,7 +31,6 @@ const MultiSelect: FC<MultiSelectProps> = ({
     const newSelected = selected?.includes(value)
       ? selected.filter((item) => item !== value)
       : [...selected, value];
-    console.log("newSelected", newSelected);
     onChange(newSelected);
   };
 

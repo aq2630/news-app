@@ -5,8 +5,10 @@ export const transformArticlesResponse: (
   articles: any[],
   sourceName: sources
 ) => NewsArticle[] = (articles, sourceName) => {
+  let updatedArticlesData: NewsArticle[] = [];
+
   if (sourceName === "newsapi") {
-    return articles.map((article) => {
+    updatedArticlesData = articles.map((article) => {
       return {
         id: article.id,
         title: article.title,
@@ -22,7 +24,7 @@ export const transformArticlesResponse: (
   }
 
   if (sourceName === "guardian") {
-    return articles.map((article) => {
+    updatedArticlesData = articles.map((article) => {
       return {
         id: article.id,
         title: article.webTitle,
@@ -36,18 +38,24 @@ export const transformArticlesResponse: (
     });
   }
 
-  return articles.map((article) => {
-    return {
-      id: article.id,
-      title: article.headline.main,
-      description: article.lead_paragraph,
-      category: article.section_name,
-      url: article.web_url,
-      imageUrl: `${NY_TIME_IMAGE_PREFIX}${article.multimedia[0].url}`,
-      publishedAt: article.publishedAt,
-      source: sourceName,
-    };
-  });
+  if (sourceName === "nyt") {
+    updatedArticlesData = articles.map((article) => {
+      return {
+        id: article._id,
+        title: article.headline.main,
+        description: article.lead_paragraph,
+        category: article.section_name,
+        url: article.web_url,
+        imageUrl: article.multimedia?.[0]?.url
+          ? `${NY_TIME_IMAGE_PREFIX}${article.multimedia[0].url}`
+          : "",
+        publishedAt: article.pub_date,
+        source: sourceName,
+      };
+    });
+  }
+
+  return updatedArticlesData;
 };
 
 export const getAPIParams = (params: APIParams, apiSource: string) => {

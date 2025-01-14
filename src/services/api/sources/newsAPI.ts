@@ -18,7 +18,11 @@ export const fetchNewsApiNews = async (
       },
     });
 
-    return transformArticlesResponse(response.data.articles, "newsapi");
+    if (response.data.articles.length > 0) {
+      return transformArticlesResponse(response.data.articles, "newsapi");
+    } else {
+      return [];
+    }
   } catch (error) {
     throw new Error("Failed to fetch Guardian news");
   }

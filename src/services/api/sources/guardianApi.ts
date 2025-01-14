@@ -14,10 +14,15 @@ export const fetchGuardianNews = async (
     const response = await guardianApi.get("/search", {
       params: getAPIParams(params, "guardian"),
     });
-    return transformArticlesResponse(
-      response.data.response.results,
-      "guardian"
-    );
+
+    if (response.data.response.results.length > 0) {
+      return transformArticlesResponse(
+        response.data.response.results,
+        "guardian"
+      );
+    } else {
+      return [];
+    }
   } catch (error) {
     throw new Error("Failed to fetch Guardian news");
   }
