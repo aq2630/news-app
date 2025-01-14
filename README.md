@@ -1,50 +1,70 @@
 # News App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple News Articles Application built with React and TypeScript. It fetches data from three different sources:
 
-Currently, two official plugins are available:
+- NewsAPI
+- The Guardian
+- The New York Times
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+News Application has Side Drawer which shows Filters and Personalisation Options for the User to filter the News Articles based on Specific Categories and Authors. User can also select Date Ranges to filter out the Articles in between specific dates.
+User can also search for specific keywords to fetch the desired News Articles.
 
-## Expanding the ESLint configuration
+## Running the Application
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### With Docker
 
-- Configure the top-level `parserOptions` property like this:
+#### Prerequisites
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+- Docker installed on your machine
+- Docker Compose installed on your machine
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+#### Steps
 
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
+1. **Build and Run the Container**
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
-```
+   ```bash
+   # Using Docker Compose (recommended)
+   docker-compose up --build
+
+   # OR using Docker directly
+   docker build -t news-app .
+   docker run -p 3000:3000 news-app
+
+   ```
+
+2. **project will be running on localhost:3000**
+
+### locally withiout Docker
+
+#### Steps
+
+1. clone the project from github
+2. go into the project folder
+3. create .env file in the root directory of the project folder with below variables
+
+   ```bash
+    VITE_NEWSAPI_API_KEY=newsapi_key
+    VITE_GUARDIAN_API_KEY=guardian_api_key
+    VITE_NYTIMES_API_KEY=nytimes_api_key
+
+   ```
+
+4. run the below commands
+
+   ```bash
+   npm install
+   # OR
+   yarn
+
+   ```
+
+5. run the below commands
+
+   ```bash
+   npm run dev
+   # OR
+   yarn dev
+
+   ```
+
+6. **project will be running on localhost:5173**
