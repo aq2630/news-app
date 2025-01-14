@@ -1,5 +1,3 @@
-export const ALL_SOURCES = ["guardian", "nyt", "newsapi"];
-
 export const SOURCE_OPTIONS = [
   { value: "all", label: "All Sources" },
   { value: "guardian", label: "The Guardian" },

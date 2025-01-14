@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ALL_SOURCES, SOURCE_OPTIONS } from "@/constants/commonConstants";
+import { SOURCE_OPTIONS } from "@/constants/commonConstants";
 import { FC } from "react";
 
 interface SelectInputProps {
